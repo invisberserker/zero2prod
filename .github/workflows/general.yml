@@ -3,16 +3,15 @@ name: Rust
 
 # To automatically trigger the workflow
 on:
-  # NB: this differs from the book's project!
-  # These settings allow us to run this specific CI pipeline for PRs against
-  # this specific branch (a.k.a. book chapter).
   push:
     branches:
       - master
+      - "chapter-*"
   pull_request:
     types: [opened, synchronize, reopened]
     branches:
       - master
+      - "chapter-*"
 
 env:
   CARGO_TERM_COLOR: always
@@ -25,36 +24,30 @@ env:
 # A workflow run is made up of one or more jobs, which run in parallel by default
 # Each job runs in a runner environment specified by runs-on
 jobs:
-  # Unique identifier of our job (`job_id`)
   test:
     # Sets the name `Test` for the job, which is displayed in the GitHub UI
     name: Test
     # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
+    env:
+      # This is the connection string for the database within the CI runner
+      DATABASE_URL: "postgres://postgres:password@localhost:5432/newsletter"
+
     # Service containers to run alongside the `test` container job
     services:
       # Label used to access the service container
       postgres:
-        # Docker Hub image
         image: postgres:14
         # Environment variables scoped only for the `postgres` element
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
           POSTGRES_DB: postgres
-        # When you map ports using the ports keyword, GitHub uses the --publish command to publish the container’s ports to the Docker host
-        # Opens tcp port 5432 on the host and service container
         ports:
           - 5432:5432
-    env:
-      # This is the connection string for the database within the CI runner
-      DATABASE_URL: "postgres://postgres:password@localhost:5432/newsletter"
     steps:
       # Downloads a copy of the code in your repository before running CI tests
       - name: Check out repository code
-        # The uses keyword specifies that this step will run v4 of the actions/checkout action.
-        # This is an action that checks out your repository onto the runner, allowing you to run scripts or other actions against your code (such as build and test tools).
-        # You should use the checkout action any time your workflow will run against the repository's code.
         uses: actions/checkout@v4
 
       # This GitHub Action installs a Rust toolchain using rustup. It is designed for one-line concise usage and good defaults.
