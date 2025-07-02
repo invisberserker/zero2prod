@@ -1,0 +1,10 @@
+.env
+targets/
+tests/
+Dockerfile
+scripts/
+migrations/
+
+.vscode/
+.git
+.gitignore
