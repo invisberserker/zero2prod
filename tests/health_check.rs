@@ -152,6 +152,7 @@ async fn subscribe_returns_a_400_when_fields_are_present_but_invalid() {
             .await
             .expect("Failed to execute request.");
 
+        println!("{:?}", response);
         assert_eq!(
             400,
             response.status().as_u16(),
