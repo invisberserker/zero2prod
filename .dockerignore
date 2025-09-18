@@ -8,3 +8,5 @@ migrations/
 .vscode/
 .git
 .gitignore
+.aws/
+.github/
