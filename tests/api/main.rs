@@ -1,5 +1,6 @@
 mod health_check;
 mod helpers;
+mod login;
 mod newsletter;
 mod rng_adapter;
 mod subscriptions;
